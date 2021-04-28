@@ -1,125 +1,137 @@
 <template>
   <div id="app">
     <div class="main-wrapper">
-        <header>
-            <h1>TODOリスト</h1>
-            <p>入力したTODOは「未完了のTODO」に追加されます。<br>
-            </p>
-        </header>
-        <main>
-            <div class="input-area">
-                <h2>入力エリア</h2>
-                <input 
-                  type="text" 
-                  :value="inputText" 
-                  @input="input($event)" 
-                  placeholder="todoを入力"
-                >
-                <button :class="buttonStyle" @click="todoAdd">追加</button>
-            </div>
+      <header>
+        <h1>TODOリスト</h1>
+        <p>入力したTODOは「未完了のTODO」に追加されます。<br>
+        </p>
+      </header>
+      <main>
+        <!-- インプットエリア -->
+        <Input 
+          :inputText="inputText" 
+          :isEditing="isEditing" 
+          @myInput="myInput($event)" 
+          @myInputAdd="myInputAdd"
+        />
+
+        <!-- 未入力エリア -->
+        <Incomplete 
+          :incompleteTodos="incompleteTodos"
+          @my-move-to-complete="myMoveToComplete"
+          @my-move-to-horyu="myMoveToHoryu"
+          @my-delete-incomplete-todos="myDeleteIncompleteTodos"
+        />
+
+        <!-- 完了エリア -->
+        <Complete 
+          :completeTodos="completeTodos"
+          @my-delete-complete-todos="myDeleteCompleteTodos"
+        />
 
 
-            <div class="incomplete-area">
-                <h2>未完了のTODO</h2>
-                <ul v-for="list in incompleteTodos" :key="list">
-                  <li>{{ list }}</li>
-                  <button @click="moveToComplete(list)">完了へ</button>
-                  <button @click="moveToHoryu(list)">保留へ</button>
-                  <button @click="deleteIncompleteTodos(list)">削除</button>
-                </ul>
-            </div>
-
-
-            <div class="complete-area">
-                <h2>完了のTODO</h2>
-                <ul v-for="list in completeTodos" :key="list">
-                  <li>{{ list }}</li>
-                  <button @click="deleteCompleteTodos(list)">削除</button>
-                </ul>
-            </div>
-
-            <div class="horyu-area">
-                <h2>保留中のTODO</h2>
-                <ul v-for="list in horyuTodos" :key="list">
-                  <li>{{ list }}</li>
-                  <button @click="moveToIncompleteTodos(list)">未完了のTODOへ</button>
-                  <button @click="deleteHoryuTodos(list)">削除</button>
-                </ul>
-            </div>
-        </main>
+        <!-- 保留エリア -->
+        <Horyu 
+          :horyuTodos="horyuTodos"
+          @my-move-to-incomplete-todos="myMoveToIncompleteTodos"
+          @my-delete-horyu-todos="myDeleteHoryuTodos"
+        />
+      </main>
 
 
     </div>
     <footer>
-        Copyright taichi All Rights Reserved
+      Copyright taichi All Rights Reserved
     </footer>
   </div>
 </template>
 
 <script>
-
-export default {
-  name: 'App',
-  components: {
-    
-  },
-  data(){
-    return {
-      inputText: '',
-      incompleteTodos: [],
-      completeTodos: [],
-      horyuTodos: [],
-      isEditing: false
-    }
-  },
-  computed: {
-    buttonStyle() {
-      const buttonStyle = []
-      if(this.isEditing) {
-        buttonStyle.push('active')
-      }
-      return buttonStyle
-    }
+import Complete from './components/Complete.vue'
+import Horyu from './components/Horyu.vue'
+import Incomplete from './components/Incomplete.vue'
+import Input from "./components/Input"
+  export default {
+    name: 'App',
+    components: {
+      Input,
+      Incomplete,
+      Complete,
+      Horyu,
     },
-  methods: {
-    input($event) {
-      this.inputText = $event.target.value
-      if(this.inputText !== ''){
-        this.isEditing = true
-      }else{
-        this.isEditing = false
+    data() {
+      return {
+        inputText: '',
+        incompleteTodos: [],
+        completeTodos: [],
+        horyuTodos: [],
+        isEditing: false
       }
     },
-    todoAdd() {
-      if(this.inputText !== ''){
-        this.incompleteTodos.push(this.inputText)
-        this.inputText = ''
-        this.isEditing = false
-      }
+    computed: {},
+    methods: {
+      //カスタムイベント
+      myInput($event){
+        this.input($event)
+      },
+      myInputAdd(text) {
+        this.todoAdd(text)
+      },
+      myMoveToComplete(value) {
+        this.moveToComplete(value)
+      },
+      myMoveToHoryu(value) {
+        this.moveToHoryu(value)
+      },
+      myDeleteIncompleteTodos(value) {
+        this.deleteIncompleteTodos(value)
+      },
+      myDeleteCompleteTodos(value) {
+        this.deleteCompleteTodos(value)
+      },
+      myMoveToIncompleteTodos(value) {
+        this.moveToIncompleteTodos(value)
+      },
+      myDeleteHoryuTodos(value) {
+        this.deleteHoryuTodos(value)
+      },
+      //メソッド
+      input($event) {
+        this.inputText = $event.target.value
+        if (this.inputText !== '') {
+          this.isEditing = true
+        } else {
+          this.isEditing = false
+        }
+      },
+      todoAdd(text) {
+        if (text !== '') {
+          this.incompleteTodos.push(text)
+          this.inputText = ''
+          this.isEditing = false
+        }
+      },
+      moveToComplete(value) {
+        this.completeTodos.push(value)
+        this.incompleteTodos.splice(value, 1)
+      },
+      moveToHoryu(value) {
+        this.horyuTodos.push(value)
+        this.incompleteTodos.splice(value, 1)
+      },
+      deleteIncompleteTodos(value) {
+        this.incompleteTodos.splice(value, 1)
+      },
+      deleteCompleteTodos(value) {
+        this.completeTodos.splice(value, 1)
+      },
+      moveToIncompleteTodos(value) {
+        this.incompleteTodos.push(value)
+        this.horyuTodos.splice(value, 1)
+      },
+      deleteHoryuTodos(value) {
+        this.horyuTodos.splice(value, 1)
+      },
     },
-    moveToComplete(list) {
-      this.completeTodos.push(list)
-      this.incompleteTodos.splice(list, 1)
-    },
-    moveToHoryu(list) {
-      this.horyuTodos.push(list)
-      this.incompleteTodos.splice(list, 1)
-    },
-    deleteIncompleteTodos(list) {
-      this.incompleteTodos.splice(list, 1)
-    },
-    deleteCompleteTodos(list) {
-      this.completeTodos.splice(list, 1)
-    },
-    moveToIncompleteTodos(list) {
-      this.incompleteTodos.push(list)
-      this.horyuTodos.splice(list, 1)
-    },
-    deleteHoryuTodos(list) {
-      this.horyuTodos.splice(list, 1)
-    }
-  },
-}
+  }
 </script>
-
-
