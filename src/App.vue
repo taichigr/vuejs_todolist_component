@@ -77,23 +77,23 @@ import Input from "./components/Input"
       myInputAdd(text) {
         this.todoAdd(text)
       },
-      myMoveToComplete(value) {
-        this.moveToComplete(value)
+      myMoveToComplete(value, index) {
+        this.moveToComplete(value, index)
       },
-      myMoveToHoryu(value) {
-        this.moveToHoryu(value)
+      myMoveToHoryu(value, index) {
+        this.moveToHoryu(value, index)
       },
-      myDeleteIncompleteTodos(value) {
-        this.deleteIncompleteTodos(value)
+      myDeleteIncompleteTodos(value, index) {
+        this.deleteIncompleteTodos(value, index)
       },
-      myDeleteCompleteTodos(value) {
-        this.deleteCompleteTodos(value)
+      myDeleteCompleteTodos(value, index) {
+        this.deleteCompleteTodos(value, index)
       },
-      myMoveToIncompleteTodos(value) {
-        this.moveToIncompleteTodos(value)
+      myMoveToIncompleteTodos(value, index) {
+        this.moveToIncompleteTodos(value, index)
       },
-      myDeleteHoryuTodos(value) {
-        this.deleteHoryuTodos(value)
+      myDeleteHoryuTodos(value, index) {
+        this.deleteHoryuTodos(value, index)
       },
       //メソッド
       input($event) {
@@ -111,26 +111,26 @@ import Input from "./components/Input"
           this.isEditing = false
         }
       },
-      moveToComplete(value) {
+      moveToComplete(value, index) {
         this.completeTodos.push(value)
-        this.incompleteTodos.splice(value, 1)
+        this.incompleteTodos.splice(index, 1)
       },
-      moveToHoryu(value) {
+      moveToHoryu(value, index) {
         this.horyuTodos.push(value)
-        this.incompleteTodos.splice(value, 1)
+        this.incompleteTodos.splice(index, 1)
       },
-      deleteIncompleteTodos(value) {
-        this.incompleteTodos.splice(value, 1)
+      deleteIncompleteTodos(value, index) {
+        this.incompleteTodos.splice(index, 1)
       },
-      deleteCompleteTodos(value) {
-        this.completeTodos.splice(value, 1)
+      deleteCompleteTodos(value, index) {
+        this.completeTodos.splice(index, 1)
       },
-      moveToIncompleteTodos(value) {
+      moveToIncompleteTodos(value, index) {
         this.incompleteTodos.push(value)
-        this.horyuTodos.splice(value, 1)
+        this.horyuTodos.splice(index, 1)
       },
-      deleteHoryuTodos(value) {
-        this.horyuTodos.splice(value, 1)
+      deleteHoryuTodos(index) {
+        this.horyuTodos.splice(index, 1)
       },
     },
   }

@@ -1,9 +1,9 @@
 <template>
     <div class="complete-area">
         <h2>完了のTODO</h2>
-        <ul v-for="list in completeTodos" :key="list">
+        <ul v-for="(list, index) in completeTodos" :key="list">
             <li>{{ list }}</li>
-            <button @click="myDeleteCompleteTodos(list)">削除</button>
+            <button @click="myDeleteCompleteTodos(list, index)">削除</button>
         </ul>
     </div>
 </template>
@@ -18,8 +18,8 @@ export default {
         }
     },
     methods: {
-        myDeleteCompleteTodos(value) {
-            this.$emit("my-delete-complete-todos", value)
+        myDeleteCompleteTodos(value, index) {
+            this.$emit("my-delete-complete-todos", value, index)
         }
     }
 }

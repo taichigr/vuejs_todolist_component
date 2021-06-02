@@ -1,11 +1,11 @@
 <template>
     <div class="incomplete-area">
         <h2>未完了のTODO</h2>
-        <ul v-for="list in incompleteTodos" :key="list">
+        <ul v-for="(list, index) in incompleteTodos" :key="list">
             <li>{{ list }}</li>
-            <button @click="emitMoveToComplete(list)">完了へ</button>
-            <button @click="emitMoveToHoryu(list)">保留へ</button>
-            <button @click="emitDeleteIncompleteTodos(list)">削除</button>
+            <button @click="emitMoveToComplete(list, index)">完了へ</button>
+            <button @click="emitMoveToHoryu(list, index)">保留へ</button>
+            <button @click="emitDeleteIncompleteTodos(list, index)">削除</button>
         </ul>
     </div>
 </template>
@@ -20,14 +20,14 @@
             }
         },
         methods: {
-            emitMoveToComplete(value) {
-                this.$emit("my-move-to-complete", value)
+            emitMoveToComplete(value, index) {
+                this.$emit("my-move-to-complete", value, index)
             },
-            emitMoveToHoryu(value) {
-                this.$emit('my-move-to-horyu', value)
+            emitMoveToHoryu(value, index) {
+                this.$emit('my-move-to-horyu', value, index)
             },
-            emitDeleteIncompleteTodos(value) {
-                this.$emit('my-delete-incomplete-todos', value)
+            emitDeleteIncompleteTodos(value, index) {
+                this.$emit('my-delete-incomplete-todos', value, index)
             }
         }
     }
